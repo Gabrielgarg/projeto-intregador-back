@@ -6,7 +6,7 @@ import { CreatePostsSchema } from "../dtos/post/createPost.dto"
 import { GetPostsSchema } from "../dtos/post/getPosts.dto"
 import { EditPostsSchema } from "../dtos/post/editPost.dto"
 import { DeletePostsSchema } from "../dtos/post/deletePost.dto"
-import { LikeDislikePostsSchema } from "../dtos/post/likedislikePost.dto"
+import { LikeDislikePostsSchema } from "../dtos/post/likeDislikesPost.dto"
 
 export class PostController {
   constructor(

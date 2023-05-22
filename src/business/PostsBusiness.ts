@@ -241,7 +241,7 @@ export class PostBusiness {
 
         // = newLikeDislike.liketoDBModel
 
-        await this.postDatabase.insertlikedislike(newLikeDB)
+        // await this.postDatabase.insertlikedislike(newLikeDB)
 
         postDB.likes = postDB.likes + 1
           const post = new Post(

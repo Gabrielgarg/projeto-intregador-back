@@ -1,10 +1,10 @@
-import { UserDatabase } from "../database/UsersDatabase"
+import { UserDatabase } from "../database/UserDatabase"
 import { GetUsersInputDTO, GetUsersOutputDTO } from "../dtos/user/getUsers.dto"
 import { LoginInputDTO, LoginOutputDTO } from "../dtos/user/login.dto"
 import { SignupInputDTO, SignupOutputDTO } from "../dtos/user/signup.dto"
 import { BadRequestError } from "../errors/BadRequestError"
 import { NotFoundError } from "../errors/NotFoundError"
-import { TokenPayload, USER_ROLES, User } from "../models/User"
+import { TokenPayload, USER_ROLES, User, UserDB } from "../models/User"
 import { HashManager } from "../services/HashManager"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
@@ -33,7 +33,7 @@ export class UserBusiness {
 
     const usersDB = await this.userDatabase.findUsers(q)
 
-    const users = usersDB.map((userDB) => {
+    const users = usersDB.map((userDB:UserDB) => {
       const user = new User(
         userDB.id,
         userDB.name,

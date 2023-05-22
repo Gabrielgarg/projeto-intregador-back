@@ -1,7 +1,7 @@
 import express from "express"
 import { UserController } from "../controller/UsersController"
 import { UserBusiness } from "../business/UserBusiness"
-import { UserDatabase } from "../database/UsersDatabase"
+import { UserDatabase } from "../database/UserDatabase"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
 import { HashManager } from "../services/HashManager"
