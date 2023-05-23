@@ -37,6 +37,11 @@ CREATE TABLE posts (
     foreign key (creator_id) references users(id)
 );
 
+INSERT INTO posts (id, creator_id, content, likes, dislikes)
+VALUES
+
+	('66ab0a73-7f81-4326-aefd-227139216dd2', 'u004', 'asdasdas', 0, 0);
+
 CREATE TABLE likes_dislikes(
     user_id text not null,
     post_id text not null,

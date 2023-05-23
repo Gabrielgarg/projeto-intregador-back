@@ -27,9 +27,9 @@ export class UserBusiness {
       throw new BadRequestError("Token inválido")
     }
 
-    if(payload.role !== USER_ROLES.ADMIN){
-      throw new BadRequestError("Somente admins tem acesso a esses dados.")
-    }
+    // if(payload.role !== USER_ROLES.ADMIN){
+    //   throw new BadRequestError("Somente admins tem acesso a esses dados.")
+    // }
 
     const usersDB = await this.userDatabase.findUsers(q)
 
