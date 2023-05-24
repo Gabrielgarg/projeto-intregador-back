@@ -51,14 +51,29 @@ CREATE TABLE likes_dislikes(
 );
 
 
-CREATE TABLE comments_post(
-    user_id text not null,
-    post_id text not null,
+CREATE TABLE comment (
+    id text unique not null,
+    creator_id text not null,
+    post_id TEXT NOT NULL,
     content text not null,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (post_id) REFERENCES posts (id)
+    likes REAL not null,
+    dislikes REAL not null,
+    created_at TEXT DEFAULT (DATETIME()) NOT NULL,
+    update_at TEXT DEFAULT (DATETIME()) NOT NULL,
+    foreign key (creator_id) references users(id),
+    foreign key (post_id) references posts(id)
+
 );
 
+drop TABLE comment;
+
+CREATE TABLE comments_post(
+    comment_id text not null,
+    post_id text not null
+);
+
+DROP TABLE comments_post;
+
 SELECT * FROM users;
-SELECT * FROM comments;
+SELECT * FROM comments_post;
 SELECT * FROM likes_dislikes;

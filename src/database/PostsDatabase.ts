@@ -1,5 +1,5 @@
 import { LikeDislikeDB } from "../models/LikeDislike";
-import {  PLAYLIST_LIKES, PostDB } from "../models/Posts";
+import { PLAYLIST_LIKES, PostDB } from "../models/Posts";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class PostDatabase extends BaseDatabase {
@@ -37,6 +37,7 @@ export class PostDatabase extends BaseDatabase {
 
     return postDB
   }
+ 
 
   public async insertPost(
     newPostDB: PostDB
