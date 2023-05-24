@@ -21,9 +21,9 @@ const postController = new PostController(
 
 postRouter.get("/getpost", postController.getPosts)
 postRouter.post("/createpost", postController.createPost)
-postRouter.put("/editpost/", postController.editPost)
-postRouter.delete("/deletepost/", postController.deletePost)
-postRouter.put("/likedislike/", postController.likedislikePost)
+postRouter.put("/editpost/:id", postController.editPost)
+postRouter.delete("/deletepost/:id", postController.deletePost)
+postRouter.put("/:id/like", postController.likeOrDislikePlaylist)
 // postRouter.put("/editpost/:id", postController.editPost)
 // postRouter.delete("/deletepost/:id", postController.deletePost)
 // postRouter.put("/likedislike/:id", postController.likedislikePost)

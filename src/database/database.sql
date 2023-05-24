@@ -30,8 +30,8 @@ CREATE TABLE posts (
     id text unique not null,
     creator_id text not null,
     content text not null,
-    likes integer not null,
-    dislikes integer not null,
+    likes REAL not null,
+    dislikes REAL not null,
     created_at TEXT DEFAULT (DATETIME()) NOT NULL,
     update_at TEXT DEFAULT (DATETIME()) NOT NULL,
     foreign key (creator_id) references users(id)
@@ -50,6 +50,14 @@ CREATE TABLE likes_dislikes(
     FOREIGN KEY (post_id) REFERENCES posts (id)
 );
 
+
+CREATE TABLE comments_post(
+    user_id text not null,
+    post_id text not null,
+    content text not null,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (post_id) REFERENCES posts (id)
+);
 
 SELECT * FROM users;
 SELECT * FROM comments;

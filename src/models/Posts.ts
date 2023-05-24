@@ -17,6 +17,17 @@ export interface PostDB {
     createdAt: string,
     updateAt: string
   }
+
+  export interface LikeDislikeDB {
+    user_id: string,
+    post_id: string,
+    like: number
+  }
+  
+  export enum PLAYLIST_LIKES {
+    ALREADY_LIKED = "ALREADY LIKED",
+    ALREADY_DISLIKED = "ALREADY DISLIKED"
+  }
   
   export interface TokenPayloadPost {
     id: string,
@@ -65,6 +76,14 @@ export interface PostDB {
       public setLikes(value: number): void {
           this.likes = value
       }
+
+      public addLike = (): void => {
+        this.likes++
+      }
+    
+      public removeLike = (): void => {
+        this.likes--
+      }
   
       public getDislike(): number {
           return this.dislikes
@@ -72,6 +91,14 @@ export interface PostDB {
   
       public setDislike(value: number): void {
           this.dislikes = value
+      }
+
+      public addDislike = (): void => {
+        this.dislikes++
+      }
+    
+      public removeDislike = (): void => {
+        this.dislikes--
       }
       public getUpdateAt(): string {
         return this.updateAt
