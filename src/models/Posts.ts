@@ -55,6 +55,12 @@ export interface PostDB {
     post_id: string,
     like: number
   }
+
+  export interface LikeDislikeDBComment {
+    user_id: string,
+    comment_id: string,
+    like: number
+  }
   
   export enum PLAYLIST_LIKES {
     ALREADY_LIKED = "ALREADY LIKED",

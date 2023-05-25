@@ -65,6 +65,15 @@ CREATE TABLE comment (
 
 );
 
+CREATE TABLE likes_dislikes_comment(
+    user_id text not null,
+    comment_id text not null,
+    like INTEGER not null,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (comment_id) REFERENCES comment (id)
+);
+
+SELECT * from likes_dislikes_comment;
 drop TABLE comment;
 
 

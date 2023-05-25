@@ -202,8 +202,6 @@ export class PostBusiness {
 
     const payload = this.tokenManager.getPayload(token)
 
-    console.log(token)
-    console.log(postId)
 
     if (!payload) {
       throw new UnauthorizedError()

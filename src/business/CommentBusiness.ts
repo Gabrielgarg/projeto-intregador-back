@@ -6,7 +6,7 @@ import { LikeOrDislikePlaylistInputDTO, LikeOrDislikePlaylistOutputDTO } from ".
 import { BadRequestError } from "../errors/BadRequestError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { UnauthorizedError } from "../errors/Unauthorized";
-import { Comment, CommentDB, CommentModel, LikeDislikeDB, PLAYLIST_LIKES } from "../models/Posts";
+import { Comment, CommentDB, CommentModel, LikeDislikeDB, LikeDislikeDBComment, PLAYLIST_LIKES } from "../models/Posts";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
 
@@ -155,54 +155,54 @@ export class CommentBusiness {
     
         const playlist = new Comment(
           postDB.id,
-          postDB.creatorId,
-          postDB.postId,
+          postDB.creator_id,
+          postDB.post_id,
           postDB.content,
           postDB.likes,
           postDB.dislikes,
-          postDB.createdAt,
-          postDB.updateAt,
+          postDB.created_at,
+          postDB.update_at,
         )
     
         const likeSQlite = like ? 1 : 0
     
-        const likeDislikeDB: LikeDislikeDB = {
+        const likeDislikeDB: LikeDislikeDBComment = {
           user_id: payload.id,
-          post_id: postId,
+          comment_id: postId,
           like: likeSQlite
         }
     
         const likeDislikeExists =
-          await this.postDatabase.findLikeDislike(likeDislikeDB)
+          await this.commentDatabase.findLikeDislike(likeDislikeDB)
     
         if (likeDislikeExists === PLAYLIST_LIKES.ALREADY_LIKED) {
           if (like) {
-            await this.postDatabase.removeLikeDislike(likeDislikeDB)
+            await this.commentDatabase.removeLikeDislike(likeDislikeDB)
             playlist.removeLike()
           } else {
-            await this.postDatabase.updateLikeDislike(likeDislikeDB)
+            await this.commentDatabase.updateLikeDislike(likeDislikeDB)
             playlist.removeLike()
             playlist.addDislike()
           }
     
         } else if (likeDislikeExists === PLAYLIST_LIKES.ALREADY_DISLIKED) {
           if (like === false) {
-            await this.postDatabase.removeLikeDislike(likeDislikeDB)
+            await this.commentDatabase.removeLikeDislike(likeDislikeDB)
             playlist.removeDislike()
           } else {
-            await this.postDatabase.updateLikeDislike(likeDislikeDB)
+            await this.commentDatabase.updateLikeDislike(likeDislikeDB)
             playlist.removeDislike()
             playlist.addLike()
           }
     
         } else {
     
-          await this.postDatabase.insertLikeDislike(likeDislikeDB)
+          await this.commentDatabase.insertLikeDislike(likeDislikeDB)
           like ? playlist.addLike() : playlist.addDislike()
         }
     
         const updatedPlaylistDB = playlist.commenttoDBModel()
-        await this.postDatabase.updatePlaylist(updatedPlaylistDB)
+        await this.commentDatabase.updatePlaylist(updatedPlaylistDB)
     
         const output: LikeOrDislikePlaylistOutputDTO = undefined
     
