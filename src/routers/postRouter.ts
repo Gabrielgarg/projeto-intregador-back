@@ -38,6 +38,7 @@ postRouter.delete("/deletepost/:id", postController.deletePost)
 postRouter.put("/:id/like", postController.likeOrDislikePlaylist)
 postRouter.get("/:id/getpost/comments", commentController.getComments)
 postRouter.post("/getpost/createcomment", commentController.createComment)
+postRouter.put("/:id/like/comment", commentController.likeOrDislikePlaylist)
 
 // postRouter.put("/editpost/:id", postController.editPost)
 // postRouter.delete("/deletepost/:id", postController.deletePost)

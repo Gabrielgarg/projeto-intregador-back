@@ -138,7 +138,7 @@ export class PostController {
     try {
       const input = LikeOrDislikePlaylistSchema.parse({
         token: req.headers.authorization,
-        playlistId: req.params.id,
+        postId: req.params.id,
         like: req.body.like
       })
 

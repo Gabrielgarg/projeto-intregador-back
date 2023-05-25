@@ -21,7 +21,7 @@ import z from "zod"
 //aqui
 
 export interface LikeOrDislikePlaylistInputDTO {
-  playlistId: string,
+  postId: string,
   token: string,
   like: boolean
 }
@@ -29,7 +29,7 @@ export interface LikeOrDislikePlaylistInputDTO {
 export type LikeOrDislikePlaylistOutputDTO = undefined
 
 export const LikeOrDislikePlaylistSchema = z.object({
-  playlistId: z.string().min(1),
+  postId: z.string().min(1),
   token: z.string().min(1),
   like: z.boolean()
 }).transform(data => data as LikeOrDislikePlaylistInputDTO)

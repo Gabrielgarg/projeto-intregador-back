@@ -2,9 +2,11 @@ import { CommentDatabase } from "../database/CommentsDatabase";
 import { PostDatabase } from "../database/PostsDatabase";
 import { UserDatabase } from "../database/UserDatabase";
 import { CreateCommentInputDTO, CreateCommentOutputDTO, GetCommentInputDTO, GetCommentOutputDTO } from "../dtos/post/Comment.dto";
+import { LikeOrDislikePlaylistInputDTO, LikeOrDislikePlaylistOutputDTO } from "../dtos/post/likeDislikesPost.dto";
 import { BadRequestError } from "../errors/BadRequestError";
 import { NotFoundError } from "../errors/NotFoundError";
-import { Comment, CommentDB, CommentModel } from "../models/Posts";
+import { UnauthorizedError } from "../errors/Unauthorized";
+import { Comment, CommentDB, CommentModel, LikeDislikeDB, PLAYLIST_LIKES } from "../models/Posts";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
 
@@ -121,6 +123,90 @@ export class CommentBusiness {
         const output: CreateCommentOutputDTO = {
           message: "Cadastro realizado com sucesso",
         }
+    
+        return output
+      }
+      public likeOrDislikePlaylist = async (
+        input: LikeOrDislikePlaylistInputDTO
+      ): Promise<LikeOrDislikePlaylistOutputDTO> => {
+        const { token, like, postId } = input
+    
+        const payload = this.tokenManager.getPayload(token)
+    
+        if (!payload) {
+          throw new UnauthorizedError()
+        }
+    
+        const userDB =
+          await this.userDatabase.findUserById(payload.id)
+    
+    
+        if (!userDB) {
+          throw new NotFoundError("Usuário não encontrado")
+        }
+    
+        const postDB =
+          await this.commentDatabase.findCommentById(postId)
+    
+    
+        if (!postDB) {
+          throw new NotFoundError("Esse post não existe")
+        }
+    
+        const playlist = new Comment(
+          postDB.id,
+          postDB.creatorId,
+          postDB.postId,
+          postDB.content,
+          postDB.likes,
+          postDB.dislikes,
+          postDB.createdAt,
+          postDB.updateAt,
+        )
+    
+        const likeSQlite = like ? 1 : 0
+    
+        const likeDislikeDB: LikeDislikeDB = {
+          user_id: payload.id,
+          post_id: postId,
+          like: likeSQlite
+        }
+    
+        const likeDislikeExists =
+          await this.postDatabase.findLikeDislike(likeDislikeDB)
+    
+        if (likeDislikeExists === PLAYLIST_LIKES.ALREADY_LIKED) {
+          if (like) {
+            await this.postDatabase.removeLikeDislike(likeDislikeDB)
+            playlist.removeLike()
+          } else {
+            await this.postDatabase.updateLikeDislike(likeDislikeDB)
+            playlist.removeLike()
+            playlist.addDislike()
+          }
+    
+        } else if (likeDislikeExists === PLAYLIST_LIKES.ALREADY_DISLIKED) {
+          if (like === false) {
+            await this.postDatabase.removeLikeDislike(likeDislikeDB)
+            playlist.removeDislike()
+          } else {
+            await this.postDatabase.updateLikeDislike(likeDislikeDB)
+            playlist.removeDislike()
+            playlist.addLike()
+          }
+    
+        } else {
+    
+          await this.postDatabase.insertLikeDislike(likeDislikeDB)
+          like ? playlist.addLike() : playlist.addDislike()
+        }
+    
+        const updatedPlaylistDB = playlist.commenttoDBModel()
+        await this.postDatabase.updatePlaylist(updatedPlaylistDB)
+    
+        const output: LikeOrDislikePlaylistOutputDTO = undefined
+    
+        console.log(playlist)
     
         return output
       }

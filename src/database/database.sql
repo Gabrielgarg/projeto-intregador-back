@@ -67,12 +67,6 @@ CREATE TABLE comment (
 
 drop TABLE comment;
 
-CREATE TABLE comments_post(
-    comment_id text not null,
-    post_id text not null
-);
-
-DROP TABLE comments_post;
 
 SELECT * FROM users;
 SELECT * FROM comments_post;

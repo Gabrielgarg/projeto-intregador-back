@@ -192,141 +192,33 @@ export class PostBusiness {
     }
 
   }
-  // public likedislikePost = async (
-  //   input: LikeDislikePostsInputDTO
-  // ): Promise<LikeDislikePostsOutputDTO> => {
-  //   const { like, dislike, token, id } = input
-
-  //   const payload = this.tokenManager.getPayload(token)
-
-  //   if(payload === null){
-  //       throw new BadRequestError("Token inválido")
-  //   }
-
-  //   const postDB = await this.postDatabase.findPostById(id)
-
-  //   if (!postDB) {
-  //       throw new NotFoundError("'post' não encontrado")
-  //     }
-
-  //   if(postDB?.creator_id === payload.id){
-  //       throw new BadRequestError("O criador não pode dar like ou dislike")
-  //   }
-
-  //   if(like){
-
-  //     console.log("to no like")
-
-      
-  //     const jadeulike = await this.postDatabase.likedislikebyid(payload.id, postDB.id)
-      
-  //     if(jadeulike?.like === 1){
-  //       throw new NotFoundError("Já deu like no post")
-  //     }
-  //     const contadordolikedotabelalikedislike = 1
-
-  //       // await this.postDatabase.likedislike()
-  //       const newLikeDislike = new Like(
-  //         payload.id,
-  //         postDB.id,
-  //         contadordolikedotabelalikedislike
-  //       )
-
-  //       //////////->>> Parei aqui
-  //       // const newLikeDB = {
-  //       //   newLikeDislike.payload.id,
-  //       //   newLikeDislike.postDB.id,
-  //       //   newLikeDislike.contadordolikedotabelalikedislike
-  //       //   newLikeDislike.
-  //       // }
-
-  //       // = newLikeDislike.liketoDBModel
-
-  //       // await this.postDatabase.insertlikedislike(newLikeDB)
-
-  //       postDB.likes = postDB.likes + 1
-  //         const post = new Post(
-  //             postDB.id,
-  //             postDB.creator_id,
-  //             postDB.content,
-  //             postDB.likes,
-  //             postDB.dislikes,
-  //             postDB.created_at,
-  //             postDB.update_at
-  //           )
-      
-  //           const updatedPostDB: PostDB = {
-  //             id: post.getId() || postDB.id,
-  //             creator_id: post.getCreator() || postDB.creator_id,
-  //             content: post.getContent() || postDB.content,
-  //             likes:  postDB.likes || post.getLikes(),
-  //             dislikes: post.getDislike() || postDB.dislikes,
-  //             created_at: post.getCreatedAt() || postDB.created_at,
-  //             update_at: post.getUpdateAt() || postDB.update_at
-  //           }
-  
-  //     const output = {
-  //         message: "Like efetuado com sucesso!",
-  //       }
-  
-  //       await this.postDatabase.like(postDB.id, updatedPostDB)
-  
-  //     return output
-
-  //   }
-  //   if(dislike){
-
-  //     console.log("to no dislike")
-  //     postDB.likes = postDB.likes - 1
-  //     const post = new Post(
-  //         postDB.id,
-  //         postDB.creator_id,
-  //         postDB.content,
-  //         postDB.likes,
-  //         postDB.dislikes,
-  //         postDB.created_at,
-  //         postDB.update_at
-  //       )
-  
-  //       const updatedPostDB: PostDB = {
-  //         id: post.getId() || postDB.id,
-  //         creator_id: post.getCreator() || postDB.creator_id,
-  //         content: post.getContent() || postDB.content,
-  //         likes:  postDB.likes || post.getLikes(),
-  //         dislikes: post.getDislike() || postDB.dislikes,
-  //         created_at: post.getCreatedAt() || postDB.created_at,
-  //         update_at: post.getUpdateAt() || postDB.update_at
-  //       }
-
-  // const output = {
-  //     message: "Dislike efetuado com sucesso!",
-  //   }
-
-  //   await this.postDatabase.dislike(postDB.id, updatedPostDB)
-
-  // return output
-  // }
-
-  //   else{
-  //       throw new BadRequestError("Entradas inválidas.")
-  //   }
-  // }
 
   //aqui
 
   public likeOrDislikePlaylist = async (
     input: LikeOrDislikePlaylistInputDTO
   ): Promise<LikeOrDislikePlaylistOutputDTO> => {
-    const { token, like, playlistId } = input
+    const { token, like, postId } = input
 
     const payload = this.tokenManager.getPayload(token)
+
+    console.log(token)
+    console.log(postId)
 
     if (!payload) {
       throw new UnauthorizedError()
     }
 
+    const userDB =
+      await this.userDatabase.findUserById(payload.id)
+
+
+    if (!userDB) {
+      throw new NotFoundError("Usuário não encontrado")
+    }
+
     const postDB =
-      await this.postDatabase.findPostById(payload.id)
+      await this.postDatabase.findPostById(postId)
 
 
     if (!postDB) {
@@ -346,8 +238,8 @@ export class PostBusiness {
     const likeSQlite = like ? 1 : 0
 
     const likeDislikeDB: LikeDislikeDB = {
-      user_id: playlistId,
-      post_id: payload.id,
+      user_id: payload.id,
+      post_id: postId,
       like: likeSQlite
     }
 
@@ -375,9 +267,7 @@ export class PostBusiness {
       }
 
     } else {
-    //   const output = {
-    //     message: "Like adicionado!",
-    // }
+
       await this.postDatabase.insertLikeDislike(likeDislikeDB)
       like ? playlist.addLike() : playlist.addDislike()
     }
@@ -386,6 +276,8 @@ export class PostBusiness {
     await this.postDatabase.updatePlaylist(updatedPlaylistDB)
 
     const output: LikeOrDislikePlaylistOutputDTO = undefined
+
+    console.log(playlist)
 
     return output
   }
