@@ -1,5 +1,4 @@
-import { LikeDislikeDB } from "../models/LikeDislike";
-import { CommentDB, LikeDislikeDBComment, PLAYLIST_LIKES, PostDB } from "../models/Posts";
+import {LikeDislikeDB, PLAYLIST_LIKES, PostDB } from "../models/Posts";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class PostDatabase extends BaseDatabase {
@@ -30,8 +29,8 @@ export class PostDatabase extends BaseDatabase {
 
   public async findPostById(
     id: string
-  ): Promise<PostDB | undefined> {
-    const [postDB]: PostDB[] | undefined[] = await BaseDatabase
+  ): Promise<PostDB > {
+    const [postDB] = await BaseDatabase
       .connection(PostDatabase.TABLE_POSTS)
       .where({ id })
 
@@ -55,26 +54,6 @@ export class PostDatabase extends BaseDatabase {
   public async deletePost(id:string):Promise<void>{
     await BaseDatabase.connection(PostDatabase.TABLE_POSTS).delete().where({id})
   }
-
-  public async like(id: string, newPostDB:PostDB):Promise<void>{
-    await BaseDatabase.connection(PostDatabase.TABLE_POSTS).update(newPostDB).where({id})
-  }
-
-    public async dislike(id: string, newPostDB:PostDB):Promise<void>{
-        await BaseDatabase.connection(PostDatabase.TABLE_POSTS).update(newPostDB).where({id})
-  }
-
-  public async likedislikebyid(userid: string, postid:string,):Promise<LikeDislikeDB | undefined>{
-    const [likedislikeDB]:LikeDislikeDB []|undefined[] = await BaseDatabase.connection(PostDatabase.TABLE_LIKE_DISLIKE).where("user_id", "=", `%${userid}%`).andWhere("post_id", "=", `%${postid}%`)
-
-    return likedislikeDB
-  }
-
-  public async insertlikedislike(newLikeDislikeDB: LikeDislikeDB):Promise<void>{
-    await BaseDatabase.connection(PostDatabase.TABLE_LIKE_DISLIKE).insert(newLikeDislikeDB)
-  }
-
-  //aqui
 
   public updatePlaylist = async (
     playlistDB: PostDB

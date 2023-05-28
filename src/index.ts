@@ -16,6 +16,5 @@ app.listen(Number(process.env.PORT) || 3003, () => {
 })
 
 // routers das entidades
-
 app.use("/users", userRouter)
 app.use("/posts", postRouter)

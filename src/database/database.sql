@@ -50,6 +50,13 @@ CREATE TABLE likes_dislikes(
     FOREIGN KEY (post_id) REFERENCES posts (id)
 );
 
+drop TABLE posts;
+DROP TABLE comment;
+
+DROP TABLE likes_dislikes;
+
+DROP TABLE likes_dislikes_comment;
+
 
 CREATE TABLE comment (
     id text unique not null,
@@ -74,6 +81,8 @@ CREATE TABLE likes_dislikes_comment(
 );
 
 SELECT * from likes_dislikes_comment;
+
+DROP TABLE likes_dislikes_comment;
 drop TABLE comment;
 
 

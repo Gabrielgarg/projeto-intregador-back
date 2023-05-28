@@ -8,7 +8,6 @@ import {  LikeOrDislikePlaylistInputDTO, LikeOrDislikePlaylistOutputDTO } from "
 import { BadRequestError } from "../errors/BadRequestError"
 import { NotFoundError } from "../errors/NotFoundError"
 import { UnauthorizedError } from "../errors/Unauthorized"
-import { Like} from "../models/LikeDislike"
 import { LikeDislikeDB, PLAYLIST_LIKES, Post, PostDB, TokenPayloadPost } from "../models/Posts"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
@@ -37,6 +36,10 @@ export class PostBusiness {
     // }
 
     const postsDB = await this.postDatabase.findPosts(q)
+
+    if(postsDB){
+
+    }
 
     const posts = postsDB.map((postDB) => {
       const post = new Post(

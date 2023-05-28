@@ -6,7 +6,7 @@ import { LikeOrDislikePlaylistInputDTO, LikeOrDislikePlaylistOutputDTO } from ".
 import { BadRequestError } from "../errors/BadRequestError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { UnauthorizedError } from "../errors/Unauthorized";
-import { Comment, CommentDB, CommentModel, LikeDislikeDB, LikeDislikeDBComment, PLAYLIST_LIKES } from "../models/Posts";
+import { Comment, LikeDislikeDBComment, PLAYLIST_LIKES } from "../models/Posts";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
 
@@ -42,11 +42,6 @@ export class CommentBusiness {
             throw new NotFoundError("'post' não encontrado")
         }
 
-        // const commentDB = await this.commentDatabase.findCommentById(id)
-
-        // if(!commentDB){
-        //     throw new NotFoundError("'comentário' não encontrado")
-        // }
         const commentsDB = await this.commentDatabase.findallcomments(id)
 
         if(!commentsDB){
@@ -109,16 +104,6 @@ export class CommentBusiness {
     
         const newCommentDB = newComment.commenttoDBModel()
         await this.commentDatabase.insertPost(newCommentDB) 
-    
-        // modelagem do payload do token
-        // const tokenPayloadPost: TokenPayloadPost = {
-        //   id: newPost.getId(),
-        //   creator_id: newPost.getCreator()
-        // }
-    
-    
-        // // criação do token
-        // const novotoken = this.tokenManager.createTokenPost(tokenPayloadPost)
     
         const output: CreateCommentOutputDTO = {
           message: "Cadastro realizado com sucesso",
